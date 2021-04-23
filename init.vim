@@ -27,22 +27,28 @@ syntax on
 call plug#begin('~/.local/share/nvim/site/bundle')
 Plug 'tpope/vim-fugitive'
 Plug 'joshdick/onedark.vim'
-Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+"Plug 'itchyny/lightline.vim'
 call plug#end()
 
 "----PLUGINS SETTINGS----
 colorscheme onedark
 hi Normal guibg=NONE ctermbg=NONE
-let g:lightline = {
-      \ 'colorscheme': 'onedark',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \ }
+let g:airline_powerline_fonts = 1
+"let g:airline_section_z = "%l:%c"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+"let g:lightline = {
+"      \ 'colorscheme': 'onedark',
+"      \ 'active': {
+"      \   'left': [ [ 'mode', 'paste' ],
+"      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+"      \ },
+"      \ 'component_function': {
+"      \   'gitbranch': 'FugitiveHead'
+"      \ },
+"      \ }
 
 "----BINDINGS & REMAPS----
 nnoremap y "+y
