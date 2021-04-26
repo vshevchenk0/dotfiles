@@ -36,7 +36,11 @@ call plug#end()
 colorscheme onedark
 hi Normal guibg=NONE ctermbg=NONE
 let g:airline_powerline_fonts = 1
-"let g:airline_section_z = "%l:%c"
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.dirty = ' ✗'
+let g:airline_section_z = "%p%% %#__accent_bold#%{g:airline_symbols.linenr}%#__restore__#%l:%v"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 "let g:lightline = {
