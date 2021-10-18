@@ -23,6 +23,7 @@ if (has("termguicolors"))
 endif
 syntax off
 set grepprg=rg\ --vimgrep
+set clipboard+=unnamedplus
 
 "----PLUGINS----
 call plug#begin('~/.local/share/nvim/site/bundle')
@@ -139,10 +140,10 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 " disable hl with 2 esc
 nnoremap <silent><esc> <esc>:noh<CR><esc>
-nnoremap y "+y
-nnoremap Y "+y$
-vnoremap y "+y
-vnoremap Y "+y$
+" nnoremap y "+y
+" nnoremap Y "+y$
+" vnoremap y "+y
+" vnoremap Y "+y$
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
