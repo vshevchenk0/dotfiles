@@ -1,0 +1,32 @@
+let mapleader = ' '
+set scrolloff=5
+set ignorecase smartcase
+set hlsearch incsearch
+set showmode
+set nu rnu
+set clipboard+=unnamed
+set ideajoin
+set idearefactormode=keep
+
+" >> Plugs
+set NERDTree
+set surround
+set commentary
+
+" >> Keybindings
+nnoremap K :action QuickJavaDoc<CR>
+vnoremap K :action MoveLineUp<CR>
+vnoremap J :action MoveLineDown<CR>
+" disable hl
+nnoremap <leader>/ :noh<CR>
+nnoremap <leader>q :bd<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap [[ :action MethodUp<CR>
+nnoremap ]] :action MethodDown<CR>
+nnoremap <leader>r :action Refactorings.QuickListPopupAction<CR>
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+nnoremap <leader>gc :action CheckinProject<CR>
+nnoremap <leader>gp :action Vcs.Push<CR>
+nnoremap <leader>t :action ActivateTerminalToolWindow<CR>
