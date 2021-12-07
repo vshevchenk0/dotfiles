@@ -39,11 +39,17 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+#VolumeManager
+exec --no-startup-id pasystray
+
 # Changing input source
 exec --no-startup-id setxkbmap -option grp:caps_toggle,grp_led:caps -layout us,ru
 
+# Xrandr
+exec --no-startup-id xrandr --output HDMI-1 --auto --right-of eDP-1
+
 # Wallpaper
-exec --no-startup-id feh --bg-scale ~/wallpapers/wall.jpg
+exec --no-startup-id feh --bg-scale ~/wallpapers/the-great-wave.png
 
 # Composer
 exec picom
@@ -127,6 +133,10 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
+# move workspaces between monitors
+bindsym $mod+bracketleft move workspace to output left
+bindsym $mod+bracketright move workspace to output right
+
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
@@ -173,6 +183,18 @@ bindsym $super+l exec i3lock -c 111111
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+# powermenu
+set $mode_powermenu [s]uspend [p]oweroff [l]ock
+mode "$mode_powermenu" {
+    bindsym s exec i3lock -c 111111; exec systemctl suspend; mode "default"
+    bindsym p exec systemctl poweroff
+    bindsym l exec i3lock -c 111111; mode "default"
+
+    bindsym Escape mode "default"
+}
+
+bindsym $super+p mode "$mode_powermenu"
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -204,4 +226,6 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3blocks
+        # position top
+        tray_output eDP-1
 }
