@@ -49,7 +49,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+beautiful.init("/home/user/.config/awesome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "kitty"
@@ -187,7 +187,10 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    local names = { "web", "code", "term", "misc", "music", "chat", "vpn" }
+    local l = awful.layout.suit
+    local layouts = { l.max, l.max, l.spiral.dwindle, l.max, l.max, l.max, l.floating }
+    awful.tag(names, s, layouts)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -398,7 +401,7 @@ clientkeys = gears.table.join(
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 9 do
+for i = 1, 4 do
     globalkeys = gears.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, "#" .. i + 9,
@@ -436,6 +439,53 @@ for i = 1, 9 do
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
+                          if tag then
+                              client.focus:toggle_tag(tag)
+                          end
+                      end
+                  end,
+                  {description = "toggle focused client on tag #" .. i, group = "tag"})
+    )
+end
+
+for i = 8, 10 do
+    globalkeys = gears.table.join(globalkeys,
+        -- View tag only.
+        awful.key({ modkey }, "#" .. i + 9,
+                  function ()
+                        local screen = awful.screen.focused()
+                        local tag = screen.tags[i-3]
+                        if tag then
+                           tag:view_only()
+                        end
+                  end,
+                  {description = "view tag #"..i, group = "tag"}),
+        -- Toggle tag display.
+        awful.key({ modkey, "Control" }, "#" .. i + 9,
+                  function ()
+                      local screen = awful.screen.focused()
+                      local tag = screen.tags[i-3]
+                      if tag then
+                         awful.tag.viewtoggle(tag)
+                      end
+                  end,
+                  {description = "toggle tag #" .. i, group = "tag"}),
+        -- Move client to tag.
+        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+                  function ()
+                      if client.focus then
+                          local tag = client.focus.screen.tags[i-3]
+                          if tag then
+                              client.focus:move_to_tag(tag)
+                          end
+                     end
+                  end,
+                  {description = "move focused client to tag #"..i, group = "tag"}),
+        -- Toggle tag on focused client.
+        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+                  function ()
+                      if client.focus then
+                          local tag = client.focus.screen.tags[i-3]
                           if tag then
                               client.focus:toggle_tag(tag)
                           end
@@ -516,8 +566,30 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    { rule = { class = "Firefox" },
+      properties = { tag = "web", switchtotag = true } },
+
+    { rule = { class = "Google-chrome" },
+      properties = { tag = "web", switchtotag = true } },
+
+    { rule = { class = "kitty" },
+      properties = { tag = "term", switchtotag = true } },
+
+    { rule = { class = "jetbrains-pycharm" },
+      properties = { tag = "code" } },
+
+    { rule = { class = "Slack" },
+      properties = { tag = "chat" } },
+
+    { rule = { class = "discord" },
+      properties = { tag = "chat" } },
+     
+    { rule = { class = "Spotify" },
+      properties = { tag = "music" } },
+
+    { rule = { class = "pritunl" },
+      properties = { tag = "vpn" } },
+
 }
 -- }}}
 
@@ -526,7 +598,7 @@ awful.rules.rules = {
 client.connect_signal("manage", function (c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
-    -- if not awesome.startup then awful.client.setslave(c) end
+    if not awesome.startup then awful.client.setslave(c) end
 
     if awesome.startup
       and not c.size_hints.user_position
@@ -588,7 +660,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart applications
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("pasystray")
-awful.spawn.with_shell("feh --bg-scale ~/wallpapers/wall.jpg")
+awful.spawn.with_shell("feh --bg-scale ~/wallpapers/the-great-wave.png")
 awful.spawn.with_shell("picom --config ~/.config/picom/picom.conf")
 awful.spawn.with_shell("flameshot")
 awful.spawn.with_shell("setxkbmap -option grp:caps_toggle,grp_led:caps -layout us,ru")
