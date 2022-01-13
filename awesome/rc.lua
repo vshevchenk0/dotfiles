@@ -22,6 +22,11 @@ require("awful.hotkeys_popup.keys")
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+-- Widgets
+local lain = require("lain")
+local calendar_widget = require("awesome-wm-widgets.calendar-widget.calendar")
+local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -49,7 +54,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/home/user/.config/awesome/theme.lua")
+beautiful.init("/home/vshevchenko/.config/awesome/themes/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "kitty"
@@ -124,8 +129,124 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
+
+local markup = lain.util.markup
+local separators = lain.util.separators
+
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+
+-- Calendar (lain)
+beautiful.cal = lain.widget.cal({
+    attach_to = { mytextclock },
+    notification_preset = {
+        font = beautiful.font,
+        fg   = beautiful.fg_normal,
+        bg   = beautiful.bg_normal
+    }
+})
+
+-- Calendar popup
+-- local cw = calendar_widget({
+--     theme = 'nord',
+--     placement = 'top_right',
+-- })
+-- mytextclock:connect_signal("button::press",
+--     function(_, _, _, button)
+--         if button == 1 then cw.toggle() end
+--     end)
+
+-- TODO: write playerctl widget - something like below one
+-- local musicplr = awful.util.terminal .. " -title Music -e ncmpcpp"
+-- local mpdicon = wibox.widget.imagebox(theme.widget_music)
+-- mpdicon:buttons(my_table.join(
+--     awful.button({ "Mod4" }, 1, function () awful.spawn(musicplr) end),
+--     awful.button({ }, 1, function ()
+--         os.execute("mpc prev")
+--         theme.mpd.update()
+--     end),
+--     awful.button({ }, 2, function ()
+--         os.execute("mpc toggle")
+--         theme.mpd.update()
+--     end),
+--     awful.button({ }, 3, function ()
+--         os.execute("mpc next")
+--         theme.mpd.update()
+--     end)))
+-- theme.mpd = lain.widget.mpd({
+--     settings = function()
+--         if mpd_now.state == "play" then
+--             artist = " " .. mpd_now.artist .. " "
+--             title  = mpd_now.title  .. " "
+--             mpdicon:set_image(theme.widget_music_on)
+--         elseif mpd_now.state == "pause" then
+--             artist = " mpd "
+--             title  = "paused "
+--         else
+--             artist = ""
+--             title  = ""
+--             mpdicon:set_image(theme.widget_music)
+--         end
+
+--         widget:set_markup(markup.font(theme.font, markup("#EA6F81", artist) .. title))
+--     end
+-- })
+
+-- MEM
+local memicon = wibox.widget.imagebox(beautiful.widget_mem)
+local mem = lain.widget.mem({
+    settings = function()
+        widget:set_markup(markup.font(beautiful.font, " " .. mem_now.used .. "MB "))
+    end
+})
+
+-- CPU
+local cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
+local cpu = lain.widget.cpu({
+    settings = function()
+        widget:set_markup(markup.font(beautiful.font, " " .. cpu_now.usage .. "% "))
+    end
+})
+
+-- / fs
+local fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
+beautiful.fs = lain.widget.fs({
+    notification_preset = { fg = beautiful.fg_normal, bg = beautiful.bg_normal, font = beautiful.font },
+    settings = function()
+        local fsp = string.format(" %3.2f %s ", fs_now["/"].free, fs_now["/"].units)
+        widget:set_markup(markup.font(beautiful.font, fsp))
+    end
+})
+
+-- Battery
+local baticon = wibox.widget.imagebox(beautiful.widget_battery)
+local bat = lain.widget.bat({
+    settings = function()
+        if bat_now.status and bat_now.status ~= "N/A" then
+            if bat_now.ac_status == 1 then
+                baticon:set_image(beautiful.widget_ac)
+            elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+                baticon:set_image(beautiful.widget_battery_empty)
+            elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+                baticon:set_image(beautiful.widget_battery_low)
+            else
+                baticon:set_image(beautiful.widget_battery)
+            end
+            widget:set_markup(markup.font(beautiful.font, " " .. bat_now.perc .. "% "))
+        else
+            widget:set_markup(markup.font(beautiful.font, " AC "))
+            baticon:set_image(beautiful.widget_ac)
+        end
+    end
+})
+
+-- Net
+local neticon = wibox.widget.imagebox(beautiful.widget_net)
+local net = lain.widget.net({
+    settings = function()
+        widget:set_markup(markup.fontfg(beautiful.font, beautiful.fg_normal, " " .. net_now.received .. " ↓↑ " .. net_now.sent .. " "))
+    end
+})
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -182,6 +303,18 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+-- No borders when rearranging only 1 non-floating or maximized client
+screen.connect_signal("arrange", function (s)
+    local only_one = #s.tiled_clients == 1
+    for _, c in pairs(s.clients) do
+        if only_one and not c.floating or c.maximized or c.fullscreen then
+            c.border_width = 0
+        else
+            c.border_width = beautiful.border_width
+        end
+    end
+end)
+
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
@@ -232,6 +365,17 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
+            memicon,
+            mem.widget,
+            cpuicon,
+            cpu.widget,
+            fsicon,
+            beautiful.fs.widget,
+            baticon,
+            bat.widget,
+            neticon,
+            net.widget,
+            -- cpu_widget(),
             mytextclock,
             wibox.widget.systray(),
             s.mylayoutbox,
@@ -660,7 +804,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart applications
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("pasystray")
-awful.spawn.with_shell("feh --bg-scale ~/wallpapers/the-great-wave.png")
+-- awful.spawn.with_shell("feh --bg-scale ~/wallpapers/wall.jpg")
 awful.spawn.with_shell("picom --config ~/.config/picom/picom.conf")
 awful.spawn.with_shell("flameshot")
 awful.spawn.with_shell("setxkbmap -option grp:caps_toggle,grp_led:caps -layout us,ru")
