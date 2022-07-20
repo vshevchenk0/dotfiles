@@ -10,6 +10,9 @@ alias v="nvim"
 alias vim="nvim"
 alias vcfg="nvim ~/dotfiles/init.vim"
 alias vimcfg="nvim ~/dotfiles/init.vim"
+alias config="tmux neww ~/dotfiles/scripts/config.sh"
+export EDITOR=vim
+export PATH=$PATH:/usr/local/go/bin:/home/vshevchenko/go/bin
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
