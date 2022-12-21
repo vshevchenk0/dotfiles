@@ -154,3 +154,41 @@ colors:
     magenta: '#8c738c'
     cyan: '#6d96a5'
     white: '#aeb3bb'
+
+key_bindings:
+  - { key: Comma, mods: Alt, chars: "\x02," }
+  - { key: D, mods: Alt, chars: "\x02K" }
+  - { key: N, mods: Alt, chars: "\x02\"" }
+  - { key: N, mods: Alt|Shift, chars: "\x02%" }
+  - { key: F, mods: Alt, chars: "\x02\x5b\x2f" }
+  - { key: F, mods: Alt|Shift, chars: "lfcd\n" }
+  - { key: G, mods: Alt, chars: "\x02g" }
+  - { key: J, mods: Alt, chars: "\x02\x54" }
+  - { key: K, mods: Alt, chars: "\x02s" }
+  - { key: Key1, mods: Alt, chars: "\x021" }
+  - { key: Key2, mods: Alt, chars: "\x022" }
+  - { key: Key3, mods: Alt, chars: "\x023" }
+  - { key: Key4, mods: Alt, chars: "\x024" }
+  - { key: Key5, mods: Alt, chars: "\x025" }
+  - { key: Key6, mods: Alt, chars: "\x026" }
+  - { key: Key7, mods: Alt, chars: "\x027" }
+  - { key: Key8, mods: Alt, chars: "\x028" }
+  - { key: Key9, mods: Alt, chars: "\x029" }
+  - { key: L, mods: Alt, chars: "\x02L" }
+  - { key: LBracket, mods: Alt, chars: "\x0f" }
+  - { key: LBracket, mods: Alt|Shift, chars: "\x02p" }
+  - { key: O, mods: Alt, chars: "\x02u" }
+  - { key: P, mods: Alt, chars: "\x02\x50" }
+  - { key: P, mods: Alt|Shift, chars: ":Telescope commands\n" }
+  - { key: Period, mods: Alt, chars: ":ZenMode\n" }
+  - { key: Q, mods: Alt, chars: ":q\n" }
+  - { key: R, mods: Alt, chars: "\x1b\x5b\x41\x0a" }
+  - { key: RBracket, mods: Alt, chars: "\x09" }
+  - { key: RBracket, mods: Alt|Shift, chars: "\x02n" }
+  - { key: S, mods: Alt, chars: "\x1b\x3a\x77\x0a" }
+  - { key: S, mods: Alt|Shift, chars: ":wa\n" }
+  - { key: Semicolon, mods: Alt, chars: "\x02:" }
+  - { key: T, mods: Alt, chars: "\x02c" }
+  - { key: W, mods: Alt, chars: "\x02x" }
+  - { key: Z, mods: Alt, chars: "\x02z" }
+

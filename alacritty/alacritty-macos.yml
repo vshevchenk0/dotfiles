@@ -1,0 +1,183 @@
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - tmux attach -t 0 || tmux new-session
+
+selection:
+  # When set to `true`, selected text will be copied to the primary clipboard.
+  # Default: false
+  save_to_clipboard: true
+
+window:
+  # Window decorations (changes require restart)
+  #
+  # Values for `decorations`:
+  #     - full: Borders and title bar
+  #     - none: Neither borders nor title bar
+  #
+  # Values for `decorations` (macOS only):
+  #     - transparent: Title bar, transparent background and title bar buttons
+  #     - buttonless: Title bar, transparent background and no title bar buttons
+  #
+  # Default: full
+  decorations: none
+
+  # Startup Mode (changes require restart)
+  #
+  # Values for `startup_mode`:
+  #   - Windowed
+  #   - Maximized
+  #   - Fullscreen
+  #
+  # Values for `startup_mode` (macOS only):
+  #   - SimpleFullscreen
+  #
+  # Default: Windowed
+  startup_mode: Maximized
+
+font:
+  # Normal (roman) font face
+  normal:
+    # Font family
+    #
+    # Default:
+    #   - (macOS) Menlo
+    #   - (Linux/BSD) monospace
+    #   - (Windows) Consolas
+    family: Monaco Nerd Font
+
+  # Bold font face
+  bold:
+    # Font family
+    #
+    # If the bold family is not specified, it will fall back to the
+    # value specified for the normal font.
+    family: Monaco Nerd Font
+
+  # Italic font face
+  italic:
+    # Font family
+    #
+    # If the italic family is not specified, it will fall back to the
+    # value specified for the normal font.
+    family: Monaco Nerd Font
+
+  # Bold italic font face
+  bold_italic:
+    # Font family
+    #
+    # If the bold italic family is not specified, it will fall back to the
+    # value specified for the normal font.
+    family: Monaco Nerd Font
+
+  # Point size
+  size: 14.0
+
+  # Offset is the extra space around each character. `offset.y` can be thought
+  # of as modifying the line spacing, and `offset.x` as modifying the letter
+  # spacing.
+  offset:
+    x: 0
+    y: 0
+
+  # Glyph offset determines the locations of the glyphs within their cells with
+  # the default being at the bottom. Increasing `x` moves the glyph to the
+  # right, increasing `y` moves the glyph upward.
+  glyph_offset:
+    x: 0
+    y: 0
+
+  # Thin stroke font rendering (macOS only)
+  #
+  # Thin strokes are suitable for retina displays, but for non-retina screens
+  # it is recommended to set `use_thin_strokes` to `false`.
+  # use_thin_strokes: true
+
+colors:
+  primary:
+    background: '#2e3440'
+    foreground: '#d8dee9'
+    dim_foreground: '#a5abb6'
+  cursor:
+    text: '#2e3440'
+    cursor: '#d8dee9'
+  vi_mode_cursor:
+    text: '#2e3440'
+    cursor: '#d8dee9'
+  selection:
+    text: CellForeground
+    background: '#4c566a'
+  search:
+    matches:
+      foreground: CellBackground
+      background: '#88c0d0'
+    footer_bar:
+      background: '#434c5e'
+      foreground: '#d8dee9'
+  normal:
+    black: '#3b4252'
+    red: '#bf616a'
+    green: '#a3be8c'
+    yellow: '#ebcb8b'
+    blue: '#81a1c1'
+    magenta: '#b48ead'
+    cyan: '#88c0d0'
+    white: '#e5e9f0'
+  bright:
+    black: '#4c566a'
+    red: '#bf616a'
+    green: '#a3be8c'
+    yellow: '#ebcb8b'
+    blue: '#81a1c1'
+    magenta: '#b48ead'
+    cyan: '#8fbcbb'
+    white: '#eceff4'
+  dim:
+    black: '#373e4d'
+    red: '#94545d'
+    green: '#809575'
+    yellow: '#b29e75'
+    blue: '#68809a'
+    magenta: '#8c738c'
+    cyan: '#6d96a5'
+    white: '#aeb3bb'
+
+key_bindings:
+  - { key: Comma, mods: Command, chars: "\x02," }
+  - { key: D, mods: Command, chars: "\x02K" }
+  - { key: N, mods: Command, chars: "\x02\"" }
+  - { key: N, mods: Command|Shift, chars: "\x02%" }
+  - { key: F, mods: Command, chars: "\x02\x5b\x2f" }
+  - { key: F, mods: Command|Shift, chars: "lfcd\n" }
+  - { key: G, mods: Command, chars: "\x02g" }
+  - { key: J, mods: Command, chars: "\x02\x54" }
+  - { key: K, mods: Command, chars: "\x02s" }
+  - { key: Key1, mods: Command, chars: "\x021" }
+  - { key: Key2, mods: Command, chars: "\x022" }
+  - { key: Key3, mods: Command, chars: "\x023" }
+  - { key: Key4, mods: Command, chars: "\x024" }
+  - { key: Key5, mods: Command, chars: "\x025" }
+  - { key: Key6, mods: Command, chars: "\x026" }
+  - { key: Key7, mods: Command, chars: "\x027" }
+  - { key: Key8, mods: Command, chars: "\x028" }
+  - { key: Key9, mods: Command, chars: "\x029" }
+  - { key: L, mods: Command, chars: "\x02L" }
+  - { key: LBracket, mods: Command, chars: "\x0f" }
+  - { key: LBracket, mods: Command|Shift, chars: "\x02p" }
+  - { key: O, mods: Command, chars: "\x02u" }
+  - { key: P, mods: Command, chars: "\x02\x50" }
+  - { key: P, mods: Command|Shift, chars: ":Telescope commands\n" }
+  - { key: Period, mods: Command, chars: ":ZenMode\n" }
+  - { key: Q, mods: Command, chars: ":q\n" }
+  - { key: R, mods: Command, chars: "\x1b\x5b\x41\x0a" }
+  - { key: RBracket, mods: Command, chars: "\x09" }
+  - { key: RBracket, mods: Command|Shift, chars: "\x02n" }
+  - { key: S, mods: Command, chars: "\x1b\x3a\x77\x0a" }
+  - { key: S, mods: Command|Shift, chars: ":wa\n" }
+  - { key: Semicolon, mods: Command, chars: "\x02:" }
+  - { key: T, mods: Command, chars: "\x02c" }
+  - { key: W, mods: Command, chars: "\x02x" }
+  - { key: Z, mods: Command, chars: "\x02z" }
+
