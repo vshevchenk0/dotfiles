@@ -1,5 +1,11 @@
 local k = require("user.utils").keymap
-k("n", "<leader>e", ":Neotree filesystem focus<CR>")
+k("n", "<leader>e", function()
+	if (vim.bo.filetype == 'neo-tree') then
+		vim.cmd('wincmd l')
+	else
+		vim.cmd("Neotree filesystem focus")
+	end
+end)
 k("n", "<leader>vb", ":Neotree buffers float<CR>")
 k("n", "<leader>vg", ":Neotree git_status float<CR>")
 
@@ -48,8 +54,8 @@ require("neo-tree").setup({
 	enable_git_status = true,
 	enable_diagnostics = true,
 	open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
-	sort_case_insensitive = false, -- used when sorting files and directories in the tree
-	sort_function = nil, -- use a custom function for sorting files and directories in the tree
+	sort_case_insensitive = false,                                  -- used when sorting files and directories in the tree
+	sort_function = nil,                                            -- use a custom function for sorting files and directories in the tree
 
 	sources = {
 		"filesystem",
@@ -139,7 +145,7 @@ require("neo-tree").setup({
 			["q"] = "close_window",
 			["R"] = "refresh",
 			["?"] = "show_help",
-      -- Own functions to change source which skip buffers source since its always open
+			-- Own functions to change source which skip buffers source since its always open
 			-- ["<"] = prev_source,
 			-- [">"] = next_source
 			["<"] = "",
@@ -154,7 +160,7 @@ require("neo-tree").setup({
 			hide_gitignored = false,
 			hide_hidden = false, -- only works on Windows for hidden files/directories
 			hide_by_name = {
-				--"node_modules"
+				"node_modules"
 			},
 			hide_by_pattern = { -- uses glob style patterns
 				--"*.meta",
@@ -175,7 +181,7 @@ require("neo-tree").setup({
 			enabled = true, -- This will find and focus the file in the active buffer every
 		},
 		-- time the current file is changed while the tree is open.
-		group_empty_dirs = false, -- when true, empty folders will be grouped together
+		group_empty_dirs = false,         -- when true, empty folders will be grouped together
 		hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
 		-- in whatever position is specified in window.position
 		-- "open_current",  -- netrw disabled, opening a directory opens within the

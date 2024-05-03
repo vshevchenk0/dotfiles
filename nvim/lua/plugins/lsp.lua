@@ -3,7 +3,6 @@ vim.cmd('highlight! link FloatBorder Normal')
 vim.cmd('highlight! link NormalFloat Normal')
 
 local on_attach = function(client, bufnr)
-  client.server_capabilities.semanticTokensProvider = nil
   local function buf_set_keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -19,7 +18,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
   buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
   buf_set_keymap("n", "<leader>D", "<cmd>Telescope lsp_type_definitions<CR>", opts)
-  -- buf_set_keymap("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  buf_set_keymap("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   buf_set_keymap("n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
   buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
   buf_set_keymap("n", "<leader>li", "", {
@@ -66,6 +65,11 @@ local on_attach = function(client, bufnr)
   -- end
 end
 
+local on_attach_wo_semantic_tokens = function(client, bufnr)
+	client.server_capabilities.semanticTokensProvider = nil
+	on_attach(client, bufnr)
+end
+
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 require("lspconfig")["gopls"].setup({
@@ -108,14 +112,12 @@ require("lspconfig")["gopls"].setup({
 
 require("lspconfig")["tsserver"].setup({
   capabilities = capabilities,
-  on_attach = on_attach,
+  on_attach = on_attach_wo_semantic_tokens,
 })
-
--- require("lspconfig")["eslint"].setup{}
 
 require("lspconfig")["bashls"].setup({
   capabilities = capabilities,
-  on_attach = on_attach,
+  on_attach = on_attach_wo_semantic_tokens,
 })
 
 local runtime_path = vim.split(package.path, ";", {})
@@ -123,7 +125,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 require("lspconfig")["lua_ls"].setup({
   capabilities = capabilities,
-  on_attach = on_attach,
+  on_attach = on_attach_wo_semantic_tokens,
   settings = {
     Lua = {
       workspace = {
@@ -149,7 +151,7 @@ require("lspconfig")["lua_ls"].setup({
 
 require("lspconfig")["yamlls"].setup({
   capabilities = capabilities,
-  on_attach = on_attach,
+  on_attach = on_attach_wo_semantic_tokens,
   settings = {
     yaml = {
       schemaStore = {
@@ -162,7 +164,7 @@ require("lspconfig")["yamlls"].setup({
 
 require("lspconfig")["jsonls"].setup({
   capabilities = capabilities,
-  on_attach = on_attach,
+  on_attach = on_attach_wo_semantic_tokens,
   cmd = { "vscode-json-language-server", "--stdio" },
   filetypes = { "json", "jsonc" },
   init_options = {
@@ -170,16 +172,80 @@ require("lspconfig")["jsonls"].setup({
   },
 })
 
+require("lspconfig")["eslint"].setup({})
+
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    null_ls.builtins.diagnostics.eslint_d,
+    -- null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.formatting.stylua,
-    null_ls.builtins.code_actions.eslint_d,
+    -- null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.formatting.prettier,
   },
   capabilities = capabilities,
-  on_attach = on_attach,
+  on_attach = on_attach_wo_semantic_tokens,
 })
 
 require("neodev").setup()
+
+local function h(name) return vim.api.nvim_get_hl(0, { name = name }) end
+
+-- hl-groups can have any name
+vim.api.nvim_set_hl(0, 'SymbolUsageRounding', { fg = h('CursorLine').bg, italic = true })
+vim.api.nvim_set_hl(0, 'SymbolUsageContent', { bg = h('CursorLine').bg, fg = h('Comment').fg, italic = true })
+vim.api.nvim_set_hl(0, 'SymbolUsageRef', { fg = h('Function').fg, bg = h('CursorLine').bg, italic = true })
+vim.api.nvim_set_hl(0, 'SymbolUsageDef', { fg = h('Type').fg, bg = h('CursorLine').bg, italic = true })
+vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = h('@keyword').fg, bg = h('CursorLine').bg, italic = true })
+
+local function text_format(symbol)
+  local res = {}
+
+  local round_start = { '', 'SymbolUsageRounding' }
+  local round_end = { '', 'SymbolUsageRounding' }
+
+  if symbol.references then
+    local usage = symbol.references <= 1 and 'usage' or 'usages'
+    local num = symbol.references == 0 and 'no' or symbol.references
+    table.insert(res, round_start)
+    table.insert(res, { '󰌹 ', 'SymbolUsageRef' })
+    table.insert(res, { ('%s %s'):format(num, usage), 'SymbolUsageContent' })
+    table.insert(res, round_end)
+  end
+
+  if symbol.definition then
+    if #res > 0 then
+      table.insert(res, { ' ', 'NonText' })
+    end
+    table.insert(res, round_start)
+    table.insert(res, { '󰳽 ', 'SymbolUsageDef' })
+    table.insert(res, { symbol.definition .. ' defs', 'SymbolUsageContent' })
+    table.insert(res, round_end)
+  end
+
+  if symbol.implementation then
+    if #res > 0 then
+      table.insert(res, { ' ', 'NonText' })
+    end
+    table.insert(res, round_start)
+    table.insert(res, { '󰡱 ', 'SymbolUsageImpl' })
+    table.insert(res, { symbol.implementation .. ' impls', 'SymbolUsageContent' })
+    table.insert(res, round_end)
+  end
+
+  return res
+end
+
+local SymbolKind = vim.lsp.protocol.SymbolKind
+
+require('symbol-usage').setup({
+  text_format = text_format,
+  vt_position = 'end_of_line',
+  references = { enabled = false },
+  implementation = { enabled = true },
+  kinds = {
+	SymbolKind.Function,
+	SymbolKind.Method,
+	SymbolKind.Struct,
+	SymbolKind.Interface,
+  }
+})

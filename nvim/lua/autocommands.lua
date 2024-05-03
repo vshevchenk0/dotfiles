@@ -1,3 +1,4 @@
+local history = require "user.history"
 -- trim whitespace
 vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function()
@@ -15,12 +16,39 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   command = "set filetype=nginx",
   group = ftGroup,
 })
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
 
-vim.api.nvim_create_autocmd({ "FileType", "ExitPre" }, {
-  pattern = { "*.ts", "*.js" },
-  command = "!eslint_d stop",
-  group = ftGroup,
+
+-- save bufnr before leaving for proper buf close behavior (use number instead of bp)
+vim.api.nvim_create_autocmd({ "BufWinEnter", "BufAdd" }, {
+	callback = function ()
+		history.bufadd()
+	end
 })
+-- vim.api.nvim_create_autocmd("BufWipeout", {
+-- 	callback = function ()
+-- 		local bufnr = vim.api.nvim_get_current_buf()
+-- 	end
+-- })
+
+-- TODO: autocmd to insert go package name on buf open
+
+-- vim.api.nvim_create_autocmd({ "FileType", "ExitPre" }, {
+--   pattern = { "*.ts", "*.js" },
+--   command = "!eslint_d stop",
+--   group = ftGroup,
+-- })
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*.yaml",
@@ -39,10 +67,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   command = "set filetype=brief",
   group = ftGroup,
 })
-
--- vim.api.nvim_create_autocmd("VimEnter", {
---   command = "Neotree buffers show",
--- })
 
 vim.api.nvim_create_autocmd("VimEnter", {
   command = "Neotree filesystem show",
@@ -116,7 +140,7 @@ vim.api.nvim_create_autocmd({ "InsertLeave" }, {
 
 -- keymaps
 vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "qf", "help", "man", "lspinfo", "spectre_panel" },
+  pattern = { "qf", "help", "man", "lspinfo", "spectre_panel", "diff" },
   callback = function()
     vim.cmd([[
 		   nnoremap <silent> <buffer> q :close<CR>

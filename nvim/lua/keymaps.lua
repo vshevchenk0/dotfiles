@@ -1,4 +1,5 @@
 local k = require("user.utils").keymap
+local history = require("user.history")
 
 --Remap space as leader key
 k("", "<Space>", "<Nop>")
@@ -31,25 +32,40 @@ k('n', '<esc>', '<esc>:noh<CR><esc>')
 
 k('n', '<leader>x',
    function()
-       if vim.bo.modified then
-           print 'save the file bruh'
-       else
-          local bufnr = vim.api.nvim_get_current_buf()
-          -- local newbufnr = vim.api.nvim_get_current_buf()
-          -- while newbufnr == bufnr do
-          --    vim.cmd.normal(vim.api.nvim_replace_termcodes("<C-o>", true, false, true))
-          --    newbufnr = vim.api.nvim_get_current_buf()
-          -- end
-          -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-o>", true, false, true), "n", false)
-		  vim.cmd('bp')
-           -- vim.cmd('wincmd l')
-           -- if vim.bo.filetype == "neo-tree" then
-           --    print 'neo-tree opened, switching buf'
-           --    vim.cmd('bp')
-           --    vim.cmd('wincmd l')
-           -- end
-          vim.cmd('bd ' .. bufnr)
-       end
+		if vim.bo.modified then
+			print 'save the file bruh'
+		else
+			local bufnr = vim.api.nvim_get_current_buf()
+			local lastbuf = history.getlastbuf()
+			if lastbuf == nil then
+				return
+			end
+			vim.cmd('b ' .. lastbuf)
+			history.bufdel(bufnr)
+			vim.cmd('bd ' .. bufnr)
+		end
+    --    else
+    --       local bufnr = vim.api.nvim_get_current_buf()
+    --       local newbufnr = vim.api.nvim_get_current_buf()
+    --       while newbufnr == bufnr do
+    --          vim.cmd.normal(vim.api.nvim_replace_termcodes("<C-o>", true, false, true))
+    --          newbufnr = vim.api.nvim_get_current_buf()
+    --       end
+    --       -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-o>", true, false, true), "n", false)
+				--
+		  -- -- prevbuf is set in autocommands.lua
+		  -- -- if vim.b.prevbuf == nil then
+			 -- -- vim.cmd('q')
+		  -- -- end
+		  -- -- vim.cmd('b ' .. vim.b.prevbuf)
+    --        -- vim.cmd('wincmd l')
+    --        -- if vim.bo.filetype == "neo-tree" then
+    --        --    print 'neo-tree opened, switching buf'
+    --        --    vim.cmd('bp')
+    --        --    vim.cmd('wincmd l')
+    --        -- end
+    --       vim.cmd('bd ' .. bufnr)
+    --    end
    end
 )
 

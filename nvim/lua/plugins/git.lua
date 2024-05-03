@@ -1,6 +1,10 @@
 local utils = require("user.utils")
 
-require("neogit").setup{}
+require("neogit").setup{
+    integrations = {
+        diffview = true
+    },
+}
 
 require("gitsigns").setup({
 	signs = {
@@ -10,6 +14,13 @@ require("gitsigns").setup({
 		topdelete = { text = "‾" },
 		changedelete = { text = "~" },
 		untracked = { text = "┆" },
+	},
+	preview_config = {
+		border = "rounded",
+		col = 1,
+		relative = "cursor",
+		row = 0,
+		style = "minimal"
 	},
 	on_attach = function(bufnr)
 		local gs = package.loaded.gitsigns
@@ -43,15 +54,15 @@ require("gitsigns").setup({
 
 		-- Actions
 		-- map("n", "<leader>gb", ":Gitsigns blame_line<CR>")
-    map({ 'n', 'v' }, '<leader>hr', '<CMD>Gitsigns reset_hunk<CR>')
-    map({ 'n', 'v' }, '<leader>hs', '<CMD>Gitsigns stage_hunk<CR>')
-    map('n', '<leader>hu', '<CMD>Gitsigns undo_stage_hunk<CR>')
-    map('n', '<leader>hS', '<CMD>Gitsigns stage_buffer<CR>')
-    map('n', '<leader>hR', '<CMD>Gitsigns reset_buffer<CR>')
-    map('n', '<leader>hp', '<CMD>Gitsigns preview_hunk<CR>')
-    map('n', '<leader>hd', '<CMD>Gitsigns diffthis<CR>')
-    map('n', '<leader>hb', '<CMD>Gitsigns blame_line<CR>')
-    map('n', '<leader>hn', '<CMD>Neogit<CR>')
+    map({ 'n', 'v' }, '<leader>cr', '<CMD>Gitsigns reset_hunk<CR>')
+    map({ 'n', 'v' }, '<leader>cs', '<CMD>Gitsigns stage_hunk<CR>')
+    map('n', '<leader>cu', '<CMD>Gitsigns undo_stage_hunk<CR>')
+    map('n', '<leader>cS', '<CMD>Gitsigns stage_buffer<CR>')
+    map('n', '<leader>cR', '<CMD>Gitsigns reset_buffer<CR>')
+    map('n', '<leader>cp', '<CMD>Gitsigns preview_hunk<CR>')
+    -- map('n', '<leader>hd', '<CMD>Gitsigns diffthis<CR>')
+    map('n', '<leader>cb', '<CMD>Gitsigns blame_line<CR>')
+    map('n', '<leader>cn', '<CMD>Neogit<CR>')
 	end,
 })
 
@@ -67,4 +78,6 @@ function runLazyGit()
 	run:toggle()
 end
 
-utils.keymap("n", "<leader>gl", "<cmd>lua runLazyGit()<CR>")
+utils.keymap("n", "<leader>cd", "<cmd>DiffviewOpen<CR>")
+utils.keymap("n", "<leader>cx", "<cmd>DiffviewClose<CR>")
+utils.keymap("n", "<leader>cl", "<cmd>lua runLazyGit()<CR>")
