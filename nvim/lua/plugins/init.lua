@@ -39,7 +39,10 @@ return require("packer").startup(function(use)
     -- View
     use({
         "nvim-lualine/lualine.nvim",
-        requires = { "nvim-tree/nvim-web-devicons", opt = true },
+        requires = {
+			"nvim-tree/nvim-web-devicons",
+			"meuter/lualine-so-fancy.nvim"
+		},
     })
     use("kyazdani42/nvim-web-devicons")
     use({

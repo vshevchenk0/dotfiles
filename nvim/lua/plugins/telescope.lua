@@ -2,12 +2,12 @@ local actions = require("telescope.actions")
 require("telescope").setup({
 	defaults = {
 		initial_mode = "insert",
-		layout_strategy = "vertical",
-		layout_config = {
-			width = 0.8,
-			height = 0.99,
-		},
-		theme = "vertical",
+		-- layout_strategy = "vertical",
+		-- layout_config = {
+		-- 	width = 0.8,
+		-- 	height = 0.99,
+		-- },
+		-- theme = "vertical",
 		vimgrep_arguments = {
 			"rg",
 			"--no-heading",
