@@ -3,11 +3,12 @@ k("n", "<leader>e", function()
 	if (vim.bo.filetype == 'neo-tree') then
 		vim.cmd('wincmd l')
 	else
-		vim.cmd("Neotree filesystem focus")
+		vim.cmd("Neotree focus")
 	end
 end)
-k("n", "<leader>vb", ":Neotree buffers float<CR>")
-k("n", "<leader>vg", ":Neotree git_status float<CR>")
+-- k("n", "<leader>vb", ":Neotree buffers float<CR>")
+-- k("n", "<leader>vg", ":Neotree git_status float<CR>")
+k("n", "<leader>vc", ":Neotree close<CR>")
 
 -- If you want icons for diagnostic errors, you'll need to define them somewhere:
 vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
@@ -58,9 +59,9 @@ require("neo-tree").setup({
 	sort_function = nil,                                            -- use a custom function for sorting files and directories in the tree
 
 	sources = {
-		"filesystem",
-		"buffers",
 		"git_status",
+		"filesystem",
+		-- "buffers",
 	},
 
 	source_selector = {
@@ -148,8 +149,8 @@ require("neo-tree").setup({
 			-- Own functions to change source which skip buffers source since its always open
 			-- ["<"] = prev_source,
 			-- [">"] = next_source
-			["<"] = "",
-			[">"] = ""
+			["<"] = "prev_source",
+			[">"] = "next_source"
 		},
 	},
 

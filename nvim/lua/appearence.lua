@@ -112,6 +112,7 @@ require("catppuccin").setup({
 				LspInfoBorder = { link = "FloatBorder" },
 				NeoTreeDirectoryIcon = { fg = colors.subtext1 },
 				NeoTreeDirectoryName = { fg = colors.subtext1 },
+				NeoTreeEndOfBuffer = { fg = colors.mantle },
 				NeoTreeFloatBorder = { link = "TelescopeResultsBorder" },
 				NeoTreeGitConflict = { fg = colors.red },
 				NeoTreeGitDeleted = { fg = colors.red },
@@ -249,7 +250,7 @@ require("catppuccin").setup({
 				TSTypeQualifier = { fg = colors.peach },
 				TSURI = { fg = colors.blue },
 				TSVariable = { fg = colors.text },
-				TSVariableBuiltin = { fg = colors.peach },
+				TSVariableBuiltin = { fg = colors.mauve },
 
 				["@annotation"] = { link = "TSAnnotation" },
 				["@attribute"] = { link = "TSAttribute" },
@@ -336,6 +337,7 @@ require("catppuccin").setup({
 				["@uri"] = { link = "TSURI" },
 				["@variable"] = { link = "TSVariable" },
 				["@variable.builtin"] = { link = "TSVariableBuiltin" },
+				["@variable.parameter"] = { link = "TSVariable" },
 
 				["@lsp.mod.readonly"] = { link = "TSConstant" },
 				["@lsp.type.class"] = { link = "TSType" },
@@ -360,11 +362,12 @@ require("catppuccin").setup({
 				["@lsp.type.struct"] = { link = "TSType" },
 				["@lsp.type.type"] = { link = "TSType" },
 				["@lsp.type.typeParameter"] = { link = "TSTypeDefinition" },
-				["@lsp.type.variable"] = { link = "TSVariable" }, -- can be made {} to preserve TS highlight
+				["@lsp.type.variable"] = { }, -- { link = "TSVariable" } // {} preserves TS highlight
 				-- some typescript nonsense i hopefully can get rid of one day :-)
 				["@lsp.typemod.function.readonly"] = { link = "TSFunction" },
 				["@lsp.typemod.property.readonly"] = { link = "TSProperty" },
 				["@lsp.typemod.parameter.readonly"] = { link = "TSProperty" },
+				["@lsp.typemod.variable.local"] = { link = "TSVariable" },
 			}
 		end,
 		latte = function(colors)
