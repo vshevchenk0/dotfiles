@@ -12,7 +12,7 @@ end
 function bufhistory.bufadd()
 	local history = vim.g.bufhistory and vim.g.bufhistory or {}
 	local bufnr = vim.api.nvim_get_current_buf()
-	if vim.fn.buflisted(bufnr) ~= 1 then
+	if vim.fn.buflisted(bufnr) ~= 1 or vim.bo.filetype == "oil" or vim.bo.filetype == "qf" then
 		return
 	end
 	local idx = find_index(history, bufnr)

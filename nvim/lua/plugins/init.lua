@@ -22,7 +22,8 @@ return require("packer").startup(function(use)
     use("jose-elias-alvarez/null-ls.nvim")
     use("folke/neodev.nvim")
     use("smjonas/inc-rename.nvim")
-	use("Wansmer/symbol-usage.nvim")
+    use("Wansmer/symbol-usage.nvim")
+    use("aznhe21/actions-preview.nvim")
 
     use("mfussenegger/nvim-dap")
     use("leoluz/nvim-dap-go")
@@ -58,48 +59,21 @@ return require("packer").startup(function(use)
         "rcarriga/nvim-notify",
       }
     })
-    -- use("Mofiqul/vscode.nvim")
-    use("gbprod/nord.nvim")
     use("navarasu/onedark.nvim")
-    -- use("fcancelinha/northern.nvim")
-    -- use("AlexvZyl/nordic.nvim")
-    -- use("CodeGradox/onehalf-lush")
-    -- use("olivercederborg/poimandres.nvim")
-    -- use("lewpoly/sherbet.nvim")
-    -- use("rmehri01/onenord.nvim")
-    -- use("kvrohit/rasmus.nvim")
-    -- use("HoNamDuong/hybrid.nvim")
     use("xiantang/darcula-dark.nvim")
-	use({ "briones-gabriel/darcula-solid.nvim", requires = "rktjmp/lush.nvim" })
-	use("lourenci/github-colors")
-	use("sainnhe/sonokai")
-	use("sainnhe/edge")
-	use("marko-cerovac/material.nvim")
-	use({"catppuccin/nvim", as = "catppuccin"})
-	use("ribru17/bamboo.nvim")
-	use("romgrk/kyntell.vim")
-	use("calind/selenized.nvim")
-	use("p00f/alabaster.nvim")
-	use("tiagovla/tokyodark.nvim")
-	use("RRethy/base16-nvim")
-	use({ "loganswartz/sunburn.nvim", requires = "loganswartz/polychrome.nvim" })
-	use("jaywilliams/vim-vwilight")
-	use("ramojus/mellifluous.nvim")
-	use("comfysage/evergarden")
-	use("ellisonleao/gruvbox.nvim")
-	use("luisiacc/gruvbox-baby")
-	-- use({
-	-- 	"NTBBloodbath/doom-one.nvim",
-		-- setup = function()
-		-- 	vim.g.doom_one_enable_treesitter = true
-		-- end,
-		-- config = function()
-		-- 	vim.cmd('colorscheme doom-one')
-		-- end
-	-- })
+    use("sainnhe/sonokai")
+    use("sainnhe/edge")
+    use("marko-cerovac/material.nvim")
+    use({"catppuccin/nvim", as = "catppuccin"})
+    use("ribru17/bamboo.nvim")
+    use("ellisonleao/gruvbox.nvim")
+    use("luisiacc/gruvbox-baby")
+    use("sainnhe/gruvbox-material")
 
     -- Navigation
     -- use("kyazdani42/nvim-tree.lua")
+    use("stevearc/oil.nvim")
+    use("refractalize/oil-git-status.nvim")
     use({
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
@@ -117,6 +91,12 @@ return require("packer").startup(function(use)
     })
     use("karb94/neoscroll.nvim")
     use("preservim/tagbar")
+    use({
+      "utilyre/barbecue.nvim",
+      requires = {
+        "SmiteshP/nvim-navic"
+      }
+    })
 
     -- Git
     use("lewis6991/gitsigns.nvim")
@@ -132,11 +112,4 @@ return require("packer").startup(function(use)
     use("tpope/vim-surround")
     use("windwp/nvim-autopairs")
     use("numToStr/Comment.nvim")
-
-	-- Neorg
-	use ({
-		"nvim-neorg/neorg",
-		run = ":Neorg sync-parsers",
-		requires = "nvim-lua/plenary.nvim",
-	})
 end)

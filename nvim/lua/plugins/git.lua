@@ -1,5 +1,14 @@
 local utils = require("user.utils")
 
+local diffview = require("diffview")
+diffview.setup({
+  keymaps = {
+    file_panel = {
+      { "n", "q", diffview.close }
+    }
+  }
+})
+
 require("neogit").setup{
     integrations = {
         diffview = true
@@ -8,10 +17,10 @@ require("neogit").setup{
 
 require("gitsigns").setup({
 	signs = {
-		add = { text = "│" },
-		change = { text = "│" },
-		delete = { text = "_" },
-		topdelete = { text = "‾" },
+		add = { text = "▌" },
+		change = { text = "▌" },
+		delete = { text = "▁" },
+		topdelete = { text = "▔" },
 		changedelete = { text = "~" },
 		untracked = { text = "┆" },
 	},
@@ -54,15 +63,15 @@ require("gitsigns").setup({
 
 		-- Actions
 		-- map("n", "<leader>gb", ":Gitsigns blame_line<CR>")
-    map({ 'n', 'v' }, '<leader>cr', '<CMD>Gitsigns reset_hunk<CR>')
-    map({ 'n', 'v' }, '<leader>cs', '<CMD>Gitsigns stage_hunk<CR>')
-    map('n', '<leader>cu', '<CMD>Gitsigns undo_stage_hunk<CR>')
-    map('n', '<leader>cS', '<CMD>Gitsigns stage_buffer<CR>')
-    map('n', '<leader>cR', '<CMD>Gitsigns reset_buffer<CR>')
-    map('n', '<leader>cp', '<CMD>Gitsigns preview_hunk<CR>')
+    map({ 'n', 'v' }, '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>')
+    map({ 'n', 'v' }, '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>')
+    map('n', '<leader>gu', '<CMD>Gitsigns undo_stage_hunk<CR>')
+    map('n', '<leader>gS', '<CMD>Gitsigns stage_buffer<CR>')
+    map('n', '<leader>gR', '<CMD>Gitsigns reset_buffer<CR>')
+    map('n', '<leader>gp', '<CMD>Gitsigns preview_hunk<CR>')
     -- map('n', '<leader>hd', '<CMD>Gitsigns diffthis<CR>')
-    map('n', '<leader>cb', '<CMD>Gitsigns blame_line<CR>')
-    map('n', '<leader>cn', '<CMD>Neogit<CR>')
+    map('n', '<leader>gb', '<CMD>Gitsigns blame_line<CR>')
+    map('n', '<leader>gn', '<CMD>Neogit<CR>')
 	end,
 })
 
@@ -78,6 +87,6 @@ function runLazyGit()
 	run:toggle()
 end
 
-utils.keymap("n", "<leader>cd", "<cmd>DiffviewOpen<CR>")
-utils.keymap("n", "<leader>cx", "<cmd>DiffviewClose<CR>")
-utils.keymap("n", "<leader>cl", "<cmd>lua runLazyGit()<CR>")
+utils.keymap("n", "<leader>gd", "<cmd>DiffviewOpen<CR>")
+utils.keymap("n", "<leader>gx", "<cmd>DiffviewClose<CR>")
+utils.keymap("n", "<leader>gl", "<cmd>lua runLazyGit()<CR>")

@@ -68,9 +68,15 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   group = ftGroup,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  command = "Neotree filesystem show",
-})
+-- vim.api.nvim_create_autocmd("BufWinEnter", {
+--   once = true,
+--   callback = function ()
+--     if not vim.g.neotree_opened then
+--       vim.cmd "Neotree git_status show"
+--       vim.g.neotree_opened = true
+--     end
+--   end
+-- })
 
 -- disable search hilight in insert mode
 local hiGroup = vim.api.nvim_create_augroup("highlight_group", { clear = false })
@@ -122,9 +128,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end
 })
 
+-- two autocmds below mess with line numbers in neotree, added filetype check to not apply commands in neotree
 -- switch to absolute line numbers in insert mode
 vim.api.nvim_create_autocmd({ "InsertEnter" }, {
   callback = function()
+	if vim.bo.filetype == "neo-tree" then
+	  return
+	end
     vim.opt.relativenumber = false
     vim.opt.cursorline = false
   end,
@@ -133,6 +143,9 @@ vim.api.nvim_create_autocmd({ "InsertEnter" }, {
 -- switch to relative line numbers in normal mode
 vim.api.nvim_create_autocmd({ "InsertLeave" }, {
   callback = function()
+	if vim.bo.filetype == "neo-tree" then
+	  return
+	end
     vim.opt.relativenumber = true
     vim.opt.cursorline = true
   end,

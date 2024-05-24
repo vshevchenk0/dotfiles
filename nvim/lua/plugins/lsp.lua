@@ -2,6 +2,18 @@ local opts = { noremap = true, silent = true }
 -- vim.cmd('highlight! link FloatBorder Normal')
 -- vim.cmd('highlight! link NormalFloat Normal')
 
+require("actions-preview").setup({
+  highlight_command = {
+    require("actions-preview.highlight").delta(),
+  },
+  telescope = {
+    layout_config = {
+      width = 0.8,
+      height = 0.9,
+    },
+  },
+})
+
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -12,14 +24,14 @@ local on_attach = function(client, bufnr)
 
   -- Mappings.
   buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  buf_set_keymap("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
+  buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
   buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
   buf_set_keymap("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
   buf_set_keymap("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
   buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
   buf_set_keymap("n", "<leader>D", "<cmd>Telescope lsp_type_definitions<CR>", opts)
   buf_set_keymap("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  buf_set_keymap("n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+  buf_set_keymap("n", "<leader>la", "<cmd>lua require('actions-preview').code_actions()<CR>", opts)
   buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
   buf_set_keymap("n", "<leader>li", "", {
     noremap = true,
@@ -103,13 +115,15 @@ require("lspconfig")["gopls"].setup({
         unusedwrite = true,
         useany = true,
       },
-      staticcheck = true,
+      -- staticcheck = true, -- doesnt seem to work :(
       directoryFilters = { "-.git", "-node_modules" },
       semanticTokens = true,
-	  noSemanticString = true,
+      noSemanticString = true,
     },
   },
 })
+
+require("lspconfig")["golangci_lint_ls"].setup({})
 
 require("lspconfig")["tsserver"].setup({
   capabilities = capabilities,
@@ -201,10 +215,18 @@ vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = h('@keyword').fg, bg = h('Curso
 local SymbolKind = vim.lsp.protocol.SymbolKind
 
 require('symbol-usage').setup({
-  vt_position = 'end_of_line',
+  vt_position = 'signcolumn',
+  request_pending_text = "",
   references = { enabled = false },
   implementation = { enabled = true },
   definition = { enabled = false },
+  text_format = function(symbol)
+    if symbol.implementation >= 1 then
+      return { { "󰰄", "Function" } }
+    else
+      return ""
+    end
+  end,
   kinds = {
 	-- SymbolKind.Function,
 	SymbolKind.Method,

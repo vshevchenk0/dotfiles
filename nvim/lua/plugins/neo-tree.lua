@@ -1,13 +1,13 @@
 local k = require("user.utils").keymap
-k("n", "<leader>e", function()
+k("n", "<leader>c", function()
 	if (vim.bo.filetype == 'neo-tree') then
 		vim.cmd('wincmd l')
 	else
-		vim.cmd("Neotree focus")
+		vim.cmd("Neotree git_status focus")
 	end
 end)
 -- k("n", "<leader>vb", ":Neotree buffers float<CR>")
--- k("n", "<leader>vg", ":Neotree git_status float<CR>")
+k("n", "<leader>e", ":Neotree filesystem float<CR>")
 k("n", "<leader>vc", ":Neotree close<CR>")
 
 -- If you want icons for diagnostic errors, you'll need to define them somewhere:
@@ -63,6 +63,8 @@ require("neo-tree").setup({
 		"filesystem",
 		-- "buffers",
 	},
+
+	default_source = "git_status",
 
 	source_selector = {
 		winbar = false,
@@ -234,6 +236,9 @@ require("neo-tree").setup({
 	},
 
 	git_status = {
+    follow_current_file = {
+      enabled = true,
+    },
 		window = {
 			position = "left",
 			mappings = {

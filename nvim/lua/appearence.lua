@@ -8,6 +8,9 @@ require('onedark').setup({
 vim.g.edge_style = "neon" -- `'default'`, `'aura'`, `'neon'`
 vim.g.sonokai_style = "maia" -- `'default'`, `'*atlantis*'`, `'*andromeda*'`, `'shusia'`, `'*maia*'`, `'espresso'`
 
+vim.g.gruvbox_material_background = "hard"
+vim.g.gruvbox_material_show_eob = 0
+
 require("bamboo").setup({
 	highlights = {
 		['@comment'] = { fg = '$grey' },

@@ -24,11 +24,6 @@ require("lualine").setup({
 		},
 		lualine_c = {
 			{
-				"filename",
-				file_status = false,
-				path = 1,
-			},
-			{
 				"fancy_diagnostics",
 				sources = { "nvim_lsp" },
 				symbols = {
@@ -39,8 +34,27 @@ require("lualine").setup({
 				},
 			},
 		},
-		lualine_x = { "fancy_lsp_servers" },
-		lualine_y = { "progress" },
+		lualine_x = {
+			{
+				"fancy_diagnostics",
+				sources = { "nvim_workspace_diagnostic" },
+				symbols = {
+					hint = "󰌵 ",
+					info = "  ",
+					warn = "  ",
+					error = "  ",
+				},
+			},
+			"fancy_lsp_servers",
+		},
+		lualine_y = {
+      function ()
+        local indent_type = vim.api.nvim_get_option_value("expandtab", { scope = "local" }) and "Spaces" or "Tab Size"
+        local indent_size = vim.api.nvim_get_option_value("shiftwidth", { scope = "local" })
+        return (" %s: %s "):format(indent_type, indent_size)
+      end,
+      "progress",
+    },
 		lualine_z = { "location" },
 	},
 	inactive_sections = {
