@@ -25,10 +25,16 @@ return require("packer").startup(function(use)
     use("Wansmer/symbol-usage.nvim")
     use("aznhe21/actions-preview.nvim")
 
-    use("mfussenegger/nvim-dap")
+    use({
+      "mfussenegger/nvim-dap",
+      requires = { "nvim-neotest/nvim-nio" },
+    })
     use("leoluz/nvim-dap-go")
     use("rcarriga/nvim-dap-ui")
-    use("nvim-neotest/neotest")
+    use({
+      "nvim-neotest/neotest",
+      requires = { "nvim-neotest/nvim-nio" },
+    })
     use("nvim-neotest/neotest-go")
 
     -- Base

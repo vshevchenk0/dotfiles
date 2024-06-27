@@ -1,5 +1,8 @@
 require("barbecue").setup({
   create_autocmd = false, -- prevent barbecue from updating itself automatically
+  exclude_filetypes = {
+    "oil",
+  },
 })
 
 vim.api.nvim_create_autocmd(

@@ -7,9 +7,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 k("i", "jj", "<Esc>")
 
-k("n", "<S-l>", ":bnext<CR>")
-k("n", "<S-h>", ":bprevious<CR>")
-
 -- save and quit
 k("n", "<leader>w", ":wall<CR>")
 -- k("n", "<leader>q", ":bd<CR>")

@@ -31,11 +31,13 @@ local options = {
 	langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz",
   clipboard = 'unnamedplus',
   updatetime = 200,
+  spell = true,
+  spelllang="en"
 }
 
 -- 2 spaces for selected filetypes
 vim.cmd([[
-autocmd FileType javascript,json,lua,typescript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType javascript,json,lua,typescript,proto setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 ]])
 
 for k, v in pairs(options) do
