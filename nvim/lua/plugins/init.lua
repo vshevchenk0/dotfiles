@@ -65,6 +65,12 @@ return require("packer").startup(function(use)
         "rcarriga/nvim-notify",
       }
     })
+    use({
+      "OXY2DEV/markview.nvim",
+      requires = {
+        "nvim-tree/nvim-web-devicons",
+      },
+    })
     use("navarasu/onedark.nvim")
     use("xiantang/darcula-dark.nvim")
     use("sainnhe/sonokai")
