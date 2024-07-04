@@ -130,3 +130,30 @@ end
 
 vim.api.nvim_create_user_command("GoModTidy", tidy, vim.tbl_extend("force", { desc = "go mod tidy" }, {}))
 k("n", "<leader>gmt", ":GoModTidy<CR>", "Run go mod tidy")
+
+local function toggle_go_test()
+  -- Get the current buffer's file name
+  local current_file = vim.fn.expand("%:p")
+  if string.match(current_file, "_test.go$") then
+    -- If the current file ends with '_test.go', try to find the corresponding non-test file
+    local non_test_file = string.gsub(current_file, "_test.go$", ".go")
+    if vim.fn.filereadable(non_test_file) == 1 then
+      -- Open the corresponding non-test file if it exists
+      vim.cmd.edit(non_test_file)
+    else
+      print("No corresponding non-test file found")
+    end
+  else
+    -- If the current file is a non-test file, try to find the corresponding test file
+    local test_file = string.gsub(current_file, ".go$", "_test.go")
+    if vim.fn.filereadable(test_file) == 1 then
+      -- Open the corresponding test file if it exists
+      vim.cmd.edit(test_file)
+    else
+      print("No corresponding test file found")
+    end
+  end
+end
+
+vim.api.nvim_create_user_command("GoToggleTest", toggle_go_test, vim.tbl_extend("force", { desc = "go toggle test" }, {}))
+k("n", "<leader>tt", ":GoToggleTest<CR>", "Toggle go test")
