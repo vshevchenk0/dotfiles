@@ -22,3 +22,15 @@
   (argument_list
     (raw_string_literal) @sql)
     (#offset! @sql 0 1 0 -1)) ; wtf does this do?
+
+; inject sql in any variable named query with raw string value
+(short_var_declaration
+  left: (expression_list
+	(identifier) @_left (#match? @_left "query"))
+  right: (expression_list
+	[
+	  (raw_string_literal)
+	  (interpreted_string_literal)
+	] @injection.content
+	(#offset! @injection.content 0 1 0 -1)
+	(#set! injection.language "sql")))
