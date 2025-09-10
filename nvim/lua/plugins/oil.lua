@@ -13,4 +13,4 @@ require("oil").setup({
 
 require("oil-git-status").setup({})
 
-vim.keymap.set("n", "<leader>p", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })

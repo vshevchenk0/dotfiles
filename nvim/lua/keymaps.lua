@@ -1,6 +1,12 @@
 local k = require("user.utils").keymap
 local history = require("user.history")
 
+-- Delete weird builtin keymaps
+vim.keymap.del("n", "gri")
+vim.keymap.del("n", "grr")
+vim.keymap.del("n", "gra")
+vim.keymap.del("n", "grn")
+
 --Remap space as leader key
 k("", "<Space>", "<Nop>")
 vim.g.mapleader = " "
@@ -65,6 +71,8 @@ k('n', '<leader>x',
     --    end
    end
 )
+k("n", "<leader>q", "<CMD>tabclose<CR>")
+k("n", "<leader>p", "<C-^>", "Previous buffer")
 
 -- visual mode niceties
 k("v", "<", "<gv")
@@ -74,3 +82,14 @@ k("v", "p", "pgvy")
 -- move selected lines above/below
 k('x', 'J', ":m '>+1<CR>gv=gv")
 k('x', 'K', ":m '<-2<CR>gv=gv")
+
+-- move view left/right
+k("n", "H", "zh", "move view left")
+k("n", "L", "zl", "move view right")
+
+-- UI
+k("n", "<leader>u", "", "UI")
+k("n", "<leader>uw", function ()
+  vim.o.wrap = not vim.o.wrap
+end, "Toggle line wrap")
+k("n", "<leader>uc", "<CMD>TSContext toggle<CR>", "Toggle TSContext (sticky lines)")

@@ -23,6 +23,10 @@ require("lualine").setup({
 			end,
 		},
 		lualine_c = {
+      {
+        "filename",
+        path = 1,
+      },
 			{
 				"fancy_diagnostics",
 				sources = { "nvim_lsp" },

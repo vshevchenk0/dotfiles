@@ -72,7 +72,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 --   once = true,
 --   callback = function ()
 --     if not vim.g.neotree_opened then
---       vim.cmd "Neotree git_status show"
+--       vim.cmd "Neotree filesystem show"
 --       vim.g.neotree_opened = true
 --     end
 --   end
@@ -153,7 +153,7 @@ vim.api.nvim_create_autocmd({ "InsertLeave" }, {
 
 -- keymaps
 vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "qf", "help", "man", "lspinfo", "spectre_panel", "diff" },
+  pattern = { "qf", "help", "man", "lspinfo", "spectre_panel", "diff", "neotest-output", "neotest-output-panel" },
   callback = function()
     vim.cmd([[
 		   nnoremap <silent> <buffer> q :close<CR>

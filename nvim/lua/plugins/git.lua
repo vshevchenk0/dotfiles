@@ -90,3 +90,4 @@ end
 utils.keymap("n", "<leader>gd", "<cmd>DiffviewOpen<CR>")
 utils.keymap("n", "<leader>gx", "<cmd>DiffviewClose<CR>")
 utils.keymap("n", "<leader>gl", "<cmd>lua runLazyGit()<CR>")
+utils.keymap("n", "<leader>gg", "<cmd> tab Git<CR>")

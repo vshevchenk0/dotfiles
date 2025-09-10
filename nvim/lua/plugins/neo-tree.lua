@@ -1,13 +1,13 @@
 local k = require("user.utils").keymap
-k("n", "<leader>c", function()
+k("n", "<leader>e", function()
 	if (vim.bo.filetype == 'neo-tree') then
 		vim.cmd('wincmd l')
 	else
-		vim.cmd("Neotree git_status focus")
+		vim.cmd("Neotree focus")
 	end
 end)
 -- k("n", "<leader>vb", ":Neotree buffers float<CR>")
-k("n", "<leader>e", ":Neotree filesystem float<CR>")
+-- k("n", "<leader>e", ":Neotree filesystem float<CR>")
 k("n", "<leader>vc", ":Neotree close<CR>")
 
 -- If you want icons for diagnostic errors, you'll need to define them somewhere:
@@ -64,7 +64,7 @@ require("neo-tree").setup({
 		-- "buffers",
 	},
 
-	default_source = "git_status",
+	default_source = "filesystem",
 
 	source_selector = {
 		winbar = false,
@@ -108,7 +108,7 @@ require("neo-tree").setup({
 	},
 
 	window = {
-		position = "left",
+		position = "left", -- "current" to open fullscreen
 		width = 43,
 		mapping_options = {
 			noremap = true,
@@ -145,7 +145,7 @@ require("neo-tree").setup({
 			["p"] = "paste_from_clipboard",
 			["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
 			["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
-			["q"] = "close_window",
+			-- ["<esc>"] = "close_window",
 			["R"] = "refresh",
 			["?"] = "show_help",
 			-- Own functions to change source which skip buffers source since its always open
@@ -252,4 +252,13 @@ require("neo-tree").setup({
 			},
 		},
 	},
+
+  event_handlers = {
+    {
+      event = "file_open_requested",
+      handler = function()
+        require("neo-tree.command").execute({ action = "close" })
+      end
+    },
+  }
 })

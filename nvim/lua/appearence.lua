@@ -1,14 +1,25 @@
 require('onedark').setup({
   highlights = {
-	NeoTreeRootName = { fg = '$fg' },
-	NeoTreeGitUntracked = { fg = '$green' },
+    -- Normal = { bg = '#1c1c1c' },
+    NeoTreeRootName = { fg = '$fg' },
+    NeoTreeDirectoryName = { fg = '$fg' },
+    NeoTreeGitUntracked = { fg = '$green' },
+    TSNamespace = { fg = '$blue' },
+    ["@constructor"] = { fmt = 'none' },
+    -- ["@lsp.type.variable"] = { fg = 'none' }, -- { fg = 'none' } preserves TS highlight
+    ["@lsp.type.parameter"] = { fg = '$fg'},
+    ["@lsp.type.namespace"] = { fg = '$cyan' },
+    ["@lsp.typemod.variable.readonly"] = { fg = '$orange' },
+    ["@lsp.typemod.variable.defaultLibrary"] = { fg = '$orange' },
   },
 })
 
 vim.g.edge_style = "neon" -- `'default'`, `'aura'`, `'neon'`
 vim.g.sonokai_style = "maia" -- `'default'`, `'*atlantis*'`, `'*andromeda*'`, `'shusia'`, `'*maia*'`, `'espresso'`
 
-vim.g.gruvbox_material_background = "hard"
+vim.g.everforest_background = 'hard'
+vim.g.gruvbox_material_background = "soft"
+vim.g.gruvbox_material_foreground = "original"
 vim.g.gruvbox_material_show_eob = 0
 
 require("bamboo").setup({
@@ -26,7 +37,7 @@ require("bamboo").setup({
 require("catppuccin").setup({
 	background = {
 		light = "latte",
-		dark = "mocha",
+		dark = "macchiato",
 	},
 	color_overrides = {
 		latte = {
@@ -57,6 +68,7 @@ require("catppuccin").setup({
 			mantle = "#f0ebce",
 			crust = "#e8e3c8",
 		},
+    -- gruvbox hard contrast and material palette
 		mocha = {
 			rosewater = "#ea6962",
 			flamingo = "#ea6962",
@@ -84,6 +96,35 @@ require("catppuccin").setup({
 			base = "#1d2021",
 			mantle = "#191b1c",
 			crust = "#141617",
+		},
+    -- gruvbox medium contrast and mix palette
+		macchiato = {
+			rosewater = "#f2594b",
+			flamingo = "#f2594b",
+			red = "#f2594b",
+			maroon = "#f2594b",
+			pink = "#d3869b",
+			mauve = "#d3869b",
+			peach = "#f28534",
+			yellow = "#e9b143",
+			green = "#b0b846",
+			teal = "#8bba7f",
+			sky = "#8bba7f",
+			sapphire = "#8bba7f",
+			blue = "#80aa9e",
+			lavender = "#80aa9e",
+			text = "#e2cca9",
+			subtext1 = "#d5c4a1",
+			subtext0 = "#bdae93",
+			overlay2 = "#a89984",
+			overlay1 = "#928374",
+			overlay0 = "#595959",
+			surface2 = "#4d4d4d",
+			surface1 = "#404040",
+			surface0 = "#363636",
+			base = "#282828",
+			mantle = "#1f2223",
+			crust = "#1a1d1e",
 		},
 	},
 	transparent_background = false,
@@ -147,7 +188,7 @@ require("catppuccin").setup({
 				TelescopeResultsBorder = { bg = colors.mantle, fg = colors.mantle },
 				TelescopeResultsNormal = { bg = colors.mantle },
 				TelescopeResultsTitle = { fg = colors.mantle, bg = colors.mantle },
-				TelescopeSelection = { bg = colors.surface0 },
+				TelescopeSelection = { fg = 'none', bg = colors.surface0 },
 				VertSplit = { bg = colors.base, fg = colors.surface0 },
 				WhichKeyFloat = { bg = colors.mantle },
 				YankHighlight = { bg = colors.surface2 },
@@ -186,6 +227,15 @@ require("catppuccin").setup({
 				Delimiter = { fg = colors.subtext2 },
 				Ignore = { fg = colors.subtext2 },
 				Macro = { fg = colors.teal },
+
+        -- lighter than editor bg
+        -- TreesitterContextBottom = { link = "NONE" },
+        -- TreesitterContext = { bg = colors.surface0 },
+        -- TreesitterContextLineNumber = { fg = colors.overlay1, bg = colors.surface0 },
+
+        -- darker than editor bg
+        TreesitterContextBottom = { link = "NONE" },
+        TreesitterContext = { bg = colors.mantle },
 
 				TSAnnotation = { fg = colors.mauve },
 				TSAttribute = { fg = colors.mauve },
@@ -371,6 +421,7 @@ require("catppuccin").setup({
 				["@lsp.typemod.property.readonly"] = { link = "TSProperty" },
 				["@lsp.typemod.parameter.readonly"] = { link = "TSProperty" },
 				["@lsp.typemod.variable.local"] = { link = "TSVariable" },
+        ["@lsp.mod.format"] = { link = "TSConstant" },
 			}
 		end,
 		latte = function(colors)
@@ -383,4 +434,5 @@ require("catppuccin").setup({
 		end,
 	},
 })
+require("darcula").setup({})
 vim.cmd("colorscheme catppuccin")

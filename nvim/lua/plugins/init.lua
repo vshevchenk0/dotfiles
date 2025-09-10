@@ -11,8 +11,8 @@ return require("packer").startup(function(use)
     use("hrsh7th/cmp-cmdline")
     use("hrsh7th/nvim-cmp")
     use({
-        "j-hui/fidget.nvim",
-        tag = "legacy",
+      "j-hui/fidget.nvim",
+      tag = "legacy",
     })
     use("L3MON4D3/LuaSnip")
     use("saadparwaiz1/cmp_luasnip")
@@ -24,6 +24,7 @@ return require("packer").startup(function(use)
     use("smjonas/inc-rename.nvim")
     use("Wansmer/symbol-usage.nvim")
     use("aznhe21/actions-preview.nvim")
+    use("ray-x/go.nvim")
 
     use({
       "mfussenegger/nvim-dap",
@@ -31,11 +32,14 @@ return require("packer").startup(function(use)
     })
     use("leoluz/nvim-dap-go")
     use("rcarriga/nvim-dap-ui")
+    use("igorlfs/nvim-dap-view")
     use({
       "nvim-neotest/neotest",
+      commit = "52fca6717ef972113ddd6ca223e30ad0abb2800c",
       requires = { "nvim-neotest/nvim-nio" },
     })
     use("nvim-neotest/neotest-go")
+    use("andythigpen/nvim-coverage")
 
     -- Base
     use("folke/todo-comments.nvim")
@@ -45,18 +49,14 @@ return require("packer").startup(function(use)
 
     -- View
     use({
-        "nvim-lualine/lualine.nvim",
-        requires = {
-			"nvim-tree/nvim-web-devicons",
-			"meuter/lualine-so-fancy.nvim"
-		},
+      "nvim-lualine/lualine.nvim",
+      requires = {
+        "nvim-tree/nvim-web-devicons",
+        "meuter/lualine-so-fancy.nvim"
+      },
     })
     use("kyazdani42/nvim-web-devicons")
-    use({
-        "nvim-treesitter/nvim-treesitter",
-        run = ":TSUpdate",
-    })
-    use("nvim-treesitter/nvim-treesitter-textobjects")
+
     use("lukas-reineke/indent-blankline.nvim")
     use({
       "folke/noice.nvim",
@@ -81,6 +81,9 @@ return require("packer").startup(function(use)
     use("ellisonleao/gruvbox.nvim")
     use("luisiacc/gruvbox-baby")
     use("sainnhe/gruvbox-material")
+    use("sainnhe/everforest")
+    use("wtfox/jellybeans.nvim")
+    use("rebelot/kanagawa.nvim")
 
     -- Navigation
     -- use("kyazdani42/nvim-tree.lua")
@@ -119,7 +122,15 @@ return require("packer").startup(function(use)
         "sindrets/diffview.nvim",
       }
     })
+    use("tpope/vim-fugitive")
+    use("shumphrey/fugitive-gitlab.vim")
 
+    use({
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate",
+    })
+    use("nvim-treesitter/nvim-treesitter-textobjects")
+    use("nvim-treesitter/nvim-treesitter-context")
     -- Edit
     use("tpope/vim-surround")
     use("windwp/nvim-autopairs")

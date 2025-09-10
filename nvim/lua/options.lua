@@ -12,7 +12,7 @@ local options = {
 	swapfile = false,
 	autoindent = true,
 	smartindent = true,
-	scrolloff = 15,
+	scrolloff = 5,
 	undofile = true,
 	undodir = os.getenv("HOME") .. "/.config/nvim/.undodir",
 	ignorecase = true,
@@ -31,13 +31,19 @@ local options = {
 	langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz",
   clipboard = 'unnamedplus',
   updatetime = 200,
-  spell = true,
-  spelllang="en"
+  wrap = false,
+  -- spell = true,
+  -- spelllang="en,ru_ru"
 }
 
 -- 2 spaces for selected filetypes
 vim.cmd([[
 autocmd FileType javascript,json,lua,typescript,proto setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+]])
+
+-- 4 spaces for selected filetypes
+vim.cmd([[
+autocmd FileType sql setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 ]])
 
 for k, v in pairs(options) do

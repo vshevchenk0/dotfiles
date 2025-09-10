@@ -1,13 +1,26 @@
 local dap = require("dap")
 local dapui = require("dapui")
 local gdap = require("dap-go")
+local dv = require("dap-view")
 
 gdap.setup({})
 dapui.setup({})
+dv.setup({
+  winbar = {
+    sections = { "scopes", "breakpoints", "threads", "repl" },
+    default_section = "repl",
+    controls = {
+      enabled = true,
+    },
+  },
+  windows = {
+    height = 0.4,
+  },
+})
 
-dap.listeners.after.event_initialized["dapui_config"] = function()
-    dapui.open()
-end
+-- dap.listeners.after.event_initialized["dapui_config"] = function()
+--     dapui.open()
+-- end
 dap.listeners.before.event_terminated["dapui_config"] = function()
     dapui.close()
 end

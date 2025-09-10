@@ -2,6 +2,12 @@ local opts = { noremap = true, silent = true }
 -- vim.cmd('highlight! link FloatBorder Normal')
 -- vim.cmd('highlight! link NormalFloat Normal')
 
+-- If you want icons for diagnostic errors, you'll need to define them somewhere:
+vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
+
 require("actions-preview").setup({
   highlight_command = {
     require("actions-preview.highlight").delta(),
@@ -84,13 +90,26 @@ end
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+-- get module name from go.mod
+local get_module_name = function()
+  local cmd = "head -n 1 go.mod | awk '{ print $2 }'" -- TODO: only run this for go projects
+  local handle = io.popen(cmd)
+  if handle == nil then
+    return
+  end
+  local module_name = handle:read("l")
+  handle:close()
+  return module_name
+end
+
 require("lspconfig")["gopls"].setup({
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
     gopls = {
       buildFlags = { "-tags=integration" },
-      gofumpt = true,
+      gofumpt = false,
+      ['local'] = get_module_name(),
       codelenses = {
         gc_details = true,
         generate = true,
@@ -99,31 +118,37 @@ require("lspconfig")["gopls"].setup({
         tidy = true,
         upgrade_dependency = true,
       },
-      hints = {
-        assignVariableTypes = true,
-        compositeLiteralFields = true,
-        compositeLiteralTypes = true,
-        constantValues = true,
-        functionTypeParameters = true,
-        parameterNames = true,
-        rangeVariableTypes = true,
-      },
+      -- hints = {
+      --   assignVariableTypes = true,
+      --   compositeLiteralFields = true,
+      --   compositeLiteralTypes = true,
+      --   constantValues = true,
+      --   functionTypeParameters = true,
+      --   parameterNames = true,
+      --   rangeVariableTypes = true,
+      -- },
       analyses = {
         nilness = true,
         unusedparams = true,
         unusedvariable = true,
         unusedwrite = true,
         useany = true,
+        shadow = true,
+        ST1000 = false,
+        efaceany = false, -- interface{} can be any annoying shit
       },
-      -- staticcheck = true, -- doesnt seem to work :(
+      staticcheck = true,
       directoryFilters = { "-.git", "-node_modules" },
       semanticTokens = true,
-      noSemanticString = true,
     },
   },
 })
 
-require("lspconfig")["golangci_lint_ls"].setup({})
+require("lspconfig")["golangci_lint_ls"].setup({
+  init_options = {
+    command = { "golangci-lint", "run", "-c", vim.loop.cwd() .. "/.golangci.pipeline.yaml", "--out-format", "json" },
+  },
+})
 
 require("lspconfig")["tsserver"].setup({
   capabilities = capabilities,
@@ -138,31 +163,31 @@ require("lspconfig")["bashls"].setup({
 local runtime_path = vim.split(package.path, ";", {})
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
-require("lspconfig")["lua_ls"].setup({
-  capabilities = capabilities,
-  on_attach = on_attach_wo_semantic_tokens,
-  settings = {
-    Lua = {
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME,
-          ".undodir",
-        },
-      },
-      telemetry = { enable = false },
-      completion = {
-        callSnippet = "Replace",
-      },
-      hint = {
-        enable = true,
-      },
-      diagnostics = {
-        globals = { "vim" },
-      },
-    },
-  },
-})
+-- require("lspconfig")["lua_ls"].setup({
+--   capabilities = capabilities,
+--   on_attach = on_attach_wo_semantic_tokens,
+--   settings = {
+--     Lua = {
+--       workspace = {
+--         checkThirdParty = false,
+--         library = {
+--           vim.env.VIMRUNTIME,
+--           ".undodir",
+--         },
+--       },
+--       telemetry = { enable = false },
+--       completion = {
+--         callSnippet = "Replace",
+--       },
+--       hint = {
+--         enable = true,
+--       },
+--       diagnostics = {
+--         globals = { "vim" },
+--       },
+--     },
+--   },
+-- })
 
 require("lspconfig")["yamlls"].setup({
   capabilities = capabilities,
@@ -188,6 +213,11 @@ require("lspconfig")["jsonls"].setup({
 })
 
 require("lspconfig")["eslint"].setup({})
+
+require("lspconfig")["buf_ls"].setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
 
 local null_ls = require("null-ls")
 null_ls.setup({
